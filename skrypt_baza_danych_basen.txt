@@ -1,0 +1,236 @@
+CREATE TABLE klienci (
+    id_klienta    INTEGER NOT NULL,
+    nazwisko      VARCHAR2(20) NOT NULL,
+    imię          VARCHAR2(20) NOT NULL,
+    ulica         VARCHAR2(20) NOT NULL,
+    nr_mieszkania INTEGER NOT NULL,
+    data_rejestracji DATE NOT NULL CHECK(data_rejestracji> Date '2020-1-1')
+);
+
+ALTER TABLE klienci ADD CONSTRAINT klienci_pk PRIMARY KEY ( id_klienta );
+
+CREATE TABLE pracownicy (
+    id_pracownika INTEGER NOT NULL,
+    nazwisko      VARCHAR2(20) NOT NULL,
+    imię          VARCHAR2(20) NOT NULL,
+    ulica         VARCHAR2(20) NOT NULL,
+    nr_mieszkania INTEGER NOT NULL,
+    stanowisko    VARCHAR2(20) DEFAULT('pracownik obsługi') NOT NULL
+);
+
+ALTER TABLE pracownicy ADD CONSTRAINT pracownicy_pk PRIMARY KEY ( id_pracownika );
+
+CREATE TABLE rezerwacje (
+    id_rezerwacji     INTEGER NOT NULL,
+    id_klienta        INTEGER NOT NULL,
+    id_pracownika     INTEGER NOT NULL,
+    data_rezerwacji Date CHECK(data_rezerwacji> date '2021-1-1') NOT NULL,
+    zarezerwowany_tor VARCHAR(20) DEFAULT('pierwszy') check(zarezerwowany_tor in ('pierwszy','drugi','trzeci')) NOT NULL 
+);
+
+ALTER TABLE rezerwacje ADD CONSTRAINT rezerwacje_pk PRIMARY KEY ( id_rezerwacji );
+
+CREATE TABLE wypłaty (
+    stanowisko VARCHAR2(20) DEFAULT('pracownik obsługi') NOT NULL,
+    pensja     NUMBER
+);
+
+ALTER TABLE wypłaty ADD CONSTRAINT pensja_pk PRIMARY KEY ( stanowisko );
+
+ALTER TABLE rezerwacje
+    ADD CONSTRAINT klienci_fk FOREIGN KEY ( id_klienta )
+        REFERENCES klienci ( id_klienta );
+
+ALTER TABLE pracownicy
+    ADD CONSTRAINT pensja_fk FOREIGN KEY ( stanowisko )
+        REFERENCES wypłaty ( stanowisko );
+
+ALTER TABLE rezerwacje
+    ADD CONSTRAINT pracownicy_fk FOREIGN KEY ( id_pracownika )
+        REFERENCES pracownicy ( id_pracownika );
+
+insert into  WYPŁATY values(
+'Kierownik',5000
+);
+insert into  WYPŁATY values(
+'menadzer',3500
+);
+insert into  WYPŁATY values(
+'pracownik obsługi',3000
+);
+insert into Pracownicy values(
+1,'Wiśniewski','Grzegorz','Wadowicka',35,'Kierownik'
+);
+insert into Pracownicy values(
+2,'Nowak','Krzysztof','Warszawska',65,'menadzer'
+);
+insert into Pracownicy values(
+3,'Kowalski','Antoni','Marszałkowska',44,'menadzer'
+);
+insert into Pracownicy values(
+4,'Mazur','Jan','Chmielna',74,'menadzer'
+);
+insert into Pracownicy values(
+5,'Kowalczyk','Aleksander','Puławska',85,'pracownik obsługi'
+);
+insert into Pracownicy values(
+6,'Kowalski','Franciszek','Francuska',55,'pracownik obsługi'
+);
+insert into Pracownicy values(
+7,'Jankowski ','Szymon','Blaszana',35,'pracownik obsługi'
+);
+insert into Pracownicy values(
+8,'Kwiatkowski','Piotr','Broniewskiego',5,'pracownik obsługi'
+);
+insert into Pracownicy values(
+9,'Wojciechowski','Mikołaj','Białostocka',7,'pracownik obsługi'
+);
+insert into Pracownicy values(
+10,'Krawczyk','Stanisław','Brzozowa',33,'pracownik obsługi'
+);
+insert into Pracownicy values(
+11,'Kaczmarek','Grzegorz','Burakowska',45,'pracownik obsługi'
+);
+insert into Pracownicy values(
+12,'Grabowski','Grzegorz','Aleje Jerozolimskie',47,'pracownik obsługi'
+);
+insert into klienci values(
+1,'Lewandowski','Robert','Wdowia',33,Date '2021-12-11' 
+);
+insert into klienci values(
+2,'Krychowiak','Grzegorz','Aleje Jerozolimskie',22,Date '2021-3-17' 
+);
+insert into klienci values(
+3,'Szczęsny','Wojciech','Blaszana',51,Date '2021-1-31'
+);
+insert into klienci values(
+4,'Milik','Arkadiusz','Borzymowska',22,Date '2022-5-1' 
+);
+insert into klienci values(
+5,'Piątek','Krzysztof','Celna',2,Date '2021-7-4' 
+);
+insert into klienci values(
+6,'Świderski','Karol','Dolna',23,Date '2022-3-17' 
+);
+insert into klienci values(
+7,'Płacheta','Przemysław','Drewnicka',46,Date '2022-1-1' 
+);
+insert into klienci values(
+8,'Szymański','Damian','Drewniana',5,Date '2021-3-3' 
+);
+insert into klienci values(
+9,'Linetty','Karol','Elekoralna',11,Date '2022-12-21' 
+);
+insert into klienci values(
+10,'Moder','Jakub','Elsterska',76,Date '2021-12-21' 
+);
+insert into klienci values(
+11,'Klich','Mateusz','Fabryczna',1,Date '2021-4-4' 
+);
+insert into klienci values(
+12,'Jóźwiak','Kamil','Gagarina',1,Date '2022-2-14' 
+);
+
+
+Insert into rezerwacje values(
+1,1,6,Date '2021-12-11','pierwszy'
+);
+Insert into rezerwacje values(
+2,2,7,Date '2021-3-17' ,'drugi'
+);
+Insert into rezerwacje values(
+3,3,9,Date '2021-1-31','trzeci'
+);
+Insert into rezerwacje values(
+4,4,6,Date '2022-5-1' ,'drugi'
+);
+Insert into rezerwacje values(
+5,5,2,Date '2021-7-4','pierwszy'
+);
+Insert into rezerwacje values(
+6,6,3,Date '2022-3-17','drugi'
+);
+Insert into rezerwacje values(
+7,7,4,Date '2022-1-1' ,'drugi'
+);
+Insert into rezerwacje values(
+8,8,6,Date '2021-3-3'  ,'trzeci'
+);
+Insert into rezerwacje values(
+9,9,6,Date '2022-12-21','trzeci'
+);
+Insert into rezerwacje values(
+10,10,9,Date '2021-12-21' ,'drugi'
+);
+Insert into rezerwacje values(
+11,11,10,Date '2021-4-4','pierwszy'
+);
+Insert into rezerwacje values(
+12,12,12,Date '2022-2-14' ,'drugi'
+);
+Insert into rezerwacje values(
+13,1,9,Date '2021-12-31' ,'pierwszy'
+);
+Insert into rezerwacje values(
+14,11,7,Date '2021-5-25' ,'pierwszy'
+);
+Insert into rezerwacje values(
+15,2,6,Date '2021-4-6' ,'trzeci'
+);
+Insert into rezerwacje values(
+16,10,11,Date '2021-12-25' ,'drugi'
+);
+Insert into rezerwacje values(
+17,1,4,Date '2022-1-12' ,'trzeci'
+);
+Insert into rezerwacje values(
+18,12,6,Date '2022-3-1' ,'pierwszy'
+);
+Insert into rezerwacje values(
+19,5,5,Date '2021-7-20','pierwszy'
+);
+Insert into rezerwacje values(
+20,4,8,Date '2022-5-30' ,'pierwszy'
+);
+Insert into rezerwacje values(
+21,3,6,Date '2021-2-15' ,'trzeci'
+);
+Insert into rezerwacje values(
+22,1,5,Date '2022-2-10' ,'trzeci'
+);
+Insert into rezerwacje values(
+23,9,6,Date '2022-12-24' ,'trzeci'
+);
+Insert into rezerwacje values(
+24,2,4,Date '2021-5-16' ,'drugi'
+);
+Insert into rezerwacje values(
+25,8,9,Date '2021-4-6' ,'drugi'
+);
+Insert into rezerwacje values(
+26,5,7,Date '2021-8-1' ,'drugi'
+);
+Insert into rezerwacje values(
+27,3,8,Date '2021-3-7' ,'pierwszy'
+);
+Insert into rezerwacje values(
+28,2,6,Date '2021-6-23' ,'trzeci'
+);
+Insert into rezerwacje values(
+29,2,3,Date '2021-6-25' ,'pierwszy'
+);
+Insert into rezerwacje values(
+30,11,2,Date '2021-6-7' ,'trzeci'
+);
+Insert into rezerwacje values(
+31,12,6,Date '2022-4-1','drugi' 
+);
+Insert into rezerwacje values(
+32,5,3,Date '2021-9-10' ,'pierwszy'
+);
+Insert into rezerwacje values(
+33,7,4,Date '2022-1-30' ,'trzeci'
+);
+Insert into rezerwacje values(
+34,1,12,Date '2022-3-15' ,'pierwszy'
+);
